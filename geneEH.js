@@ -61,6 +61,7 @@
 
             debug: 0,
             tags: [],
+            evts: {},
             taClass: 'initGEH',
 
             exe: function (func, args ) {
@@ -119,9 +120,10 @@
                 }
             },
 
-            hook: function (functionName , fun) {
+            hook: function (functionName , fun, evt) {
                 if(!this.check(functionName)){
                     this[functionName] = fun;
+                    this.evts[functionName] = (evt != "undefined") ? evt : "click";
                 }else{
                     this.clog(functionName + " overwrite?");
                 }
@@ -147,15 +149,15 @@
                         e = me.data('event'),
                         b = me.data('behavior');
 
-                    if(typeof e == "undefined"){
-                        e = "click";
-                    }
-                    geh.clog("event::"+ e);
-
                     if(typeof b == "undefined"){
                         b = "404";
                     }
                     geh.clog("behavior::"+ b);
+
+                    if(typeof e == "undefined"){
+                        e = (typeof geh.evts[b] == "undefined") ? "click" : geh.evts[b];
+                    }
+                    geh.clog("event::"+ e);
 
                     if (!geh.check(b)) {
                         geh.load(b);
@@ -206,7 +208,7 @@ $.fn.geH.hook("autoNext", function (me){
             me.next("input").focus().select();
         }
     }
-});
+}, 'keyup');
 
 // if need to create new event(sync)?
 $.fn.geH.hook("syncAll", function (me){

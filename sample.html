@@ -10,24 +10,28 @@
         <script src="geneEH.js"></script>
     </head>
     <body>
-        <ul>
+        <h2>geneEH</h2><p>
+            Behavior can be controlled by genes.
+        </p>
+        <h3>Demo</h3><ul>
             <li>
-                <p>
+                <h4>Simple</h4><p>
                     Click and look the console log.<br>
                     <a href="#" title="click me"
                         class="initGEH"
+                        data-event="click"
                         data-behavior="test">click me</a>
                 </p>
             </li>
             <li>
-                <p>
+                <h4>Error</h4><p>
                     Click and look the console log. it is a demo of error<br>
                     <a href="#" title="click me"
                         class="initGEH">click me</a>
                 </p>
             </li>
             <li>
-                <p>
+                <h4>Auto next one</h4><p>
                     fill the input which will auto jump to next one.<br>
                     <input type="text" name="col1" placeholder="i can keep 4 letters."
                         class="initGEH"
@@ -36,13 +40,11 @@
                         maxlength="4">
                     <input type="text" name="col2" placeholder="i can keep 6 letters."
                         class="initGEH"
-                        data-event="keyup"
                         data-behavior="autoNext"
                         maxlength="6">
                     <input type="text" name="col3" placeholder="i can keep many letters.">
                 </p>
             </li>
         </ul>
-
     </body>
 </html>
