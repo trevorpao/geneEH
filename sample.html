@@ -1,0 +1,48 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en" ng-app> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en" ng-app> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en" ng-app> <![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js" lang="en" ng-app><!--<![endif]-->
+    <head>
+        <meta charset="UTF-8">
+        <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script src="geneEH.js"></script>
+    </head>
+    <body>
+        <ul>
+            <li>
+                <p>
+                    Click and look the console log.<br>
+                    <a href="#" title="click me"
+                        class="initGEH"
+                        data-behavior="test">click me</a>
+                </p>
+            </li>
+            <li>
+                <p>
+                    Click and look the console log. it is a demo of error<br>
+                    <a href="#" title="click me"
+                        class="initGEH">click me</a>
+                </p>
+            </li>
+            <li>
+                <p>
+                    fill the input which will auto jump to next one.<br>
+                    <input type="text" name="col1" placeholder="i can keep 4 letters."
+                        class="initGEH"
+                        data-event="keyup"
+                        data-behavior="autoNext"
+                        maxlength="4">
+                    <input type="text" name="col2" placeholder="i can keep 6 letters."
+                        class="initGEH"
+                        data-event="keyup"
+                        data-behavior="autoNext"
+                        maxlength="6">
+                    <input type="text" name="col3" placeholder="i can keep many letters.">
+                </p>
+            </li>
+        </ul>
+
+    </body>
+</html>

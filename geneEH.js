@@ -5,10 +5,49 @@
                 history.go(-1);
             },
 
+            stdSubmit: function (me){
+                var f = me.data("ta") ? $("#"+ me.data("ta")) : me.closest("form");
+
+                $("#loading").show(); //need some loading animation
+
+                f.find("input").each(function () { if (me.val() == me.attr("placeholder")) me.val(""); });
+
+                $.ajax({
+                    "url": buri+"/",
+                    "type": "POST",
+                    "data": f.serialize(),
+                    "success": function (j) {
+                        if (j.error == "0") {
+                            f[0].reset();
+
+                            if ( typeof(j.rData.uri) != "undefined" ) {
+                                location.href = j.rData.uri;
+                            }
+                            if ( typeof(j.rData.fun) != "undefined" ) {
+                                window[j.rData.fun];
+                            }
+                            if ( typeof(j.rData.goback) != "undefined" ) {
+                                history.go(-1);
+                            }
+                        }else{
+                            this.err(j);
+                        }
+                        $("#loading").hide();  //need some loading animation
+                    },
+                    "dataType": "json",
+                    "cache": false
+                });
+            },
+
+            resetForm: function (me){
+                var f = me.data("ta") ? $("#"+ me.data("ta")) : me.closest("form");
+                f[0].reset();
+            },
+
             getChainOption: function (me){
-                var ta = me.data('ta'), v = me.val();
+                var ta = me.data('ta'), uri = me.data('uri'), v = me.val();
                 $.get(
-                    'index.php?action=get'+ ta +'Option&pid='+ v,
+                    uri+ '&pid='+ v,
                     function(data) {
                         $('#'+ ta).html(data);
                     }
@@ -17,31 +56,66 @@
 
             test: function (me){
                 var ta = me.data('ta'), v = me.val();
-                clog(this);
+                this.clog(me);
             },
 
-            "default": function (me){
-                create("error", { title:'Error!', text:'沒有收到正確的行為指令!!'});
-            },
-
-            err: function (me) {
-                if (me.message != "")
-                    create("error", { title:'Error!', text:me.message});
-                else
-                    create("error", { title:'Error!', text:'不明原因的失败'});
-            },
+            debug: 0,
+            tags: [],
+            taClass: 'initGEH',
 
             exe: function (func, args ) {
-                var fun = (!this.check(func))?this['default']:this[func];
+                var fun = (!this.check(func))?this['404']:this[func];
 
                 return fun.call(this, args);
             },
 
-            check: function (functionName){
-                if(typeof(this[functionName])=="undefined"){
+            load: function (functionName){
+                if(typeof this[functionName] == "undefined"){
+                    if(typeof importScripts == "function") {
+                        importScripts(window.location.pathname +'src/'+ functionName +'.js');
+                    }
+                    else {
+                    }
+                }
+            },
+
+            "404": function (me){
+                this.err({ message: 'command not found!!' });
+            },
+
+            err: function (me) {
+                if (me.message != "")
+                    this.clog("Error::"+ me.message);
+                else
+                    this.clog('Error::unknown error!!');
+            },
+
+            check: function (obj){
+                if(typeof this[obj] == "undefined"){
                     return false;
                 }else{
                     return true;
+                }
+            },
+
+            clog: function (txt){
+                if(typeof console != "undefined" && this.debug == 1) {
+                    if (typeof txt == "string" || typeof txt == "number") {
+                        console.log("geneEH::" + txt);
+                    }
+                    else {
+                        console.log("geneEH::" + typeof(txt));
+                        console.log(txt);
+                    }
+                }
+            },
+
+            hookTag: function(newTagName, func) {
+                if(!this.check(newTagName)){
+                    this.tags.push(newTagName);
+                    this.hook(newTagName, func);
+                }else{
+                    this.clog(functionName + " overwrite?");
                 }
             },
 
@@ -49,7 +123,7 @@
                 if(!this.check(functionName)){
                     this[functionName] = fun;
                 }else{
-                    alert(functionName + " overwrite?");
+                    this.clog(functionName + " overwrite?");
                 }
             },
 
@@ -57,37 +131,45 @@
                 if(this.check(functionName)){
                     delete this[functionName];
                 }else{
-                    alert(functionName + " exist?");
+                    this.clog(functionName + " exist?");
                 }
             },
 
-            init: function (){ //一般性的按鈕初始化
-                var ehThis = this;
-                $('.initGEH').each(function(){
-                    var me = $(this), e = me.data('event'); //多事件模式
-                    if(e==""){
+            init: function (){
+                var geh = this;
+
+                for(var tk in geh.tags){
+                    geh.exe(geh.tags[tk], $(geh.tags[tk]));
+                }
+
+                $('.'+ geh.taClass).each(function(){
+                    var me = $(this),
+                        e = me.data('event'),
+                        b = me.data('behavior');
+
+                    if(typeof e == "undefined"){
                         e = "click";
                     }
+                    geh.clog("event::"+ e);
+
+                    if(typeof b == "undefined"){
+                        b = "404";
+                    }
+                    geh.clog("behavior::"+ b);
+
+                    if (!geh.check(b)) {
+                        geh.load(b);
+                    }
+
                     if(e=="init"){
-                        var a = me.data('action'); //多 action 模式
-                        if(a!=""){
-                            aa = a.split(",");
-                            for(var ai = 0; ai < aa.length; ai++){
-                                ehThis.exe(aa[ai], me);
-                            }
-                        }
+                        geh.exe(b, me);
                     }else{
-                        me.unbind().bind(e, function(){
-                            var a = me.data('action'); //多 action 模式
-                            if(a!=""){
-                                aa = a.split(",");
-                                for(var ai = 0; ai < aa.length; ai++){
-                                    ehThis.exe(aa[ai], me);
-                                }
-                            }
+                        me.unbind().bind(e, function(evt){
+                            evt.preventDefault();
+                            geh.exe(b, me);
                         });
                     }
-                }).removeClass('initGEH');
+                }).removeClass(geh.taClass);
             }
         };
 
@@ -95,11 +177,46 @@
             if(typeof(ta)!="undefined"){
                 $.fn.geH.exe(ta, obj);
             }else{
-                var a = this.data("action");
-                $.fn.geH.exe(a, this);
+                var b = this.data("behavior");
+                $.fn.geH.exe(b, this);
             }
 
             return this;
         };
     }
 })(jQuery);
+
+// just a sample for customer tag
+$.fn.geH.hookTag('gehTag\\:loginbtn', function(me) {
+    var uniqid = "login"+ Math.floor(Math.random()*999+1),
+        parentUri = decodeURIComponent( document.location.href );
+
+    me.replaceWith('<div id="loginDiv"></div>');
+});
+
+$.fn.geH.hook("autoNext", function (me){
+    var $ta = $("#" + me.data("ta")),
+        v = me.val();
+
+    if( v.length == me.attr('maxlength')){
+        if ($ta.length) {
+            $ta.focus().select();
+        }
+        else {
+            me.next("input").focus().select();
+        }
+    }
+});
+
+// if need to create new event(sync)?
+$.fn.geH.hook("syncAll", function (me){
+    var $ta = $("." + me.data("ta")),
+        v = me.val()
+        $s = $("." + me.data("source"));
+    // 1vs1 clone?
+});
+
+$(document).ready(function(){
+    $.fn.geH.debug = 1;
+    $.fn.geH.init();
+});
