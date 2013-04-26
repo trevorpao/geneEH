@@ -30,8 +30,8 @@
                 </p>
             </li>
             <li>
-                <h4>Simple form</h4><p>
-                    <form method="post" action="" id="simpleForm">
+                <h4>Simple form</h4>
+                    <form method="post" action="" id="simpleForm"><p>
                         fill the input which will auto jump to next one.<br>
                         <input type="text" name="col1" placeholder="i can keep 4 letters."
                             class="initGEH"
@@ -52,12 +52,11 @@
                             class="initGEH"
                             data-uri="sample.json"
                             data-behavior="stdSubmit">Submit</a>
-                    </form>
-                </p>
+                    </p></form>
             </li>
             <li>
-                <h4>Sync form</h4><p>
-                    <form method="post" action="" id="syncForm">
+                <h4>Sync form</h4>
+                    <form method="post" action="" id="syncForm"><p>
                         fill the input which will auto jump to next one.<br>
                         <input type="text" name="col1" value="what's up">
                         <input type="text" name="col2" value="呃">
@@ -73,7 +72,7 @@
                         <a href="#" title="reset"
                             class="initGEH"
                             data-behavior="resetForm">Reset</a>
-                    </form><br>
+                    </p></form><br>
 
                     <a href="#" title="reset"
                         class="initGEH"
@@ -81,6 +80,14 @@
                         data-source="simpleForm"
                         data-prefix="new"
                         data-behavior="syncAll">Sync simple form</a>
+            </li>
+            <li>
+                <h4>Multiple</h4><p>
+                    Click to change the console log and Dblclick to see the alert.<br>
+                    <a href="#" title="click me"
+                        class="initGEH"
+                        data-gene="click:test, dblclick:alert"
+                        data-txt="This is the alert!!">click me</a>
                 </p>
             </li>
         </ul>

@@ -74,10 +74,14 @@ var geneEH;
                 );
             },
 
+            alert: function (me){
+                var g = $.fn.geneEH;
+
+                alert(me.data("txt"));
+            },
+
             test: function (me){
-                var g = $.fn.geneEH,
-                    ta = me.data('ta'),
-                    v = me.val();
+                var g = $.fn.geneEH;
 
                 g.clog(me);
             },
@@ -95,12 +99,21 @@ var geneEH;
             },
 
             load: function (functionName){
-                var g = $.fn.geneEH;
-                if (g.check(functionName)) {
+                var g = $.fn.geneEH,
+                    loc = window.location.pathname
+                    dir = loc.substring(0, loc.lastIndexOf('/')) + "/";
+
+                dir += (g.isset($("script[src$='geneEH.js']"))) ?
+                    $("script[src$='geneEH.js']").attr("src").replace("geneEH.js", "") : "";
+
+                if (!g.check(functionName)) {
+                    g.clog("start loading");
                     if(typeof importScripts == "function") {
-                        importScripts(window.location.pathname +'src/'+ functionName +'.js');
+                        g.clog("start importScripts");
+                        importScripts(dir +'src/'+ functionName +'.js');
                     }
                     else {
+                        $("body").append("<script src='"+ dir +"src/"+ functionName +".js'>\x3C/script>");
                     }
                 }
             },
@@ -182,29 +195,46 @@ var geneEH;
                 $('.'+ g.taClass).each(function(){
                     var me = $(this),
                         e = me.data('event'),
-                        b = me.data('behavior');
+                        b = me.data('behavior'),
+                        ebi = me.data('gene'),
+                        meb = {};
 
                     if(!g.isset(b)){
                         b = "404";
                     }
-                    g.clog("behavior::"+ b);
 
                     if(!g.isset(e)){
                         e = (!g.isset(g.evts[b])) ? "click" : g.evts[b];
                     }
-                    g.clog("event::"+ e);
 
-                    if (!g.check(b)) {
-                        g.load(b);
+                    if (!g.isset(ebi)) {
+                        meb[e] = b;
                     }
+                    else {
+                        eba = ebi.replace(" ", "").split(",");
+                        for(var ai = 0; ai < eba.length; ai++){
+                            ebo = eba[ai].split(":");
+                            meb[ebo[0]] = ebo[1];
+                        }
+                    }
+                    g.clog(meb);
 
-                    if(e=="init"){
-                        g.exe(b, me);
-                    }else{
-                        me.unbind().bind(e, function(evt){
-                            evt.preventDefault();
-                            g.exe(b, me);
-                        });
+                    me.data("meb", meb).unbind();
+
+                    for(var e in meb){
+                        if (!g.check(meb[e])) {
+                            g.clog("undefined::"+ meb[e]);
+                            g.load(meb[e]);
+                        }
+
+                        if(e=="init"){
+                            g.exe(meb[e], me);
+                        }else{
+                            me.on(e, function(evt){
+                                evt.preventDefault();
+                                g.exe(me.data("meb")[evt.type], me);
+                            });
+                        }
                     }
                 }).removeClass(g.taClass);
             }
@@ -247,20 +277,6 @@ geneEH.hook("autoNext", function (me){
         }
     }
 }, 'keyup');
-
-geneEH.hook("syncAll", function (me){
-    var g = $.fn.geneEH,
-        f = me.data("ta") ? $("#"+ me.data("ta")) : me.closest("form"),
-        s = me.data("source") ? $("#"+ me.data("source")) : me.closest("form"),
-        prefix = me.data("prefix");
-
-    f.find("input[name|='"+ prefix +"']").each(function(){
-        var n = $(this).attr("name").replace(prefix+"-", ""),
-            v = s.find("input[name='"+ n +"']").val()
-        $(this).val(v);
-    });
-
-});
 
 $(document).ready(function(){
     geneEH.debug = 1;
