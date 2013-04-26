@@ -31,7 +31,7 @@
             </li>
             <li>
                 <h4>Simple form</h4><p>
-                    <form method="post" action="">
+                    <form method="post" action="" id="simpleForm">
                         fill the input which will auto jump to next one.<br>
                         <input type="text" name="col1" placeholder="i can keep 4 letters."
                             class="initGEH"
@@ -53,6 +53,34 @@
                             data-uri="sample.json"
                             data-behavior="stdSubmit">Submit</a>
                     </form>
+                </p>
+            </li>
+            <li>
+                <h4>Sync form</h4><p>
+                    <form method="post" action="" id="syncForm">
+                        fill the input which will auto jump to next one.<br>
+                        <input type="text" name="col1" value="what's up">
+                        <input type="text" name="col2" value="呃">
+
+                        <a href="#" title="reset"
+                            class="initGEH"
+                            data-prefix="new"
+                            data-behavior="syncAll">Sync now</a><br>
+
+                        <input type="text" name="new-col1" value="">
+                        <input type="text" name="new-col2" value="">
+
+                        <a href="#" title="reset"
+                            class="initGEH"
+                            data-behavior="resetForm">Reset</a>
+                    </form><br>
+
+                    <a href="#" title="reset"
+                        class="initGEH"
+                        data-ta="syncForm"
+                        data-source="simpleForm"
+                        data-prefix="new"
+                        data-behavior="syncAll">Sync simple form</a>
                 </p>
             </li>
         </ul>

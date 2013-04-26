@@ -227,7 +227,7 @@ var geneEH;
 geneEH = $.fn.geneEH;
 
 // just a sample for customer tag
-geneEH.hookTag('gehTag\\:loginbtn', function(me) {
+geneEH.hookTag('geneEH\\:loginbtn', function(me) {
     var uniqid = "login"+ Math.floor(Math.random()*999+1),
         parentUri = decodeURIComponent( document.location.href );
 
@@ -248,12 +248,18 @@ geneEH.hook("autoNext", function (me){
     }
 }, 'keyup');
 
-// if need to create new event(sync)?
 geneEH.hook("syncAll", function (me){
-    var $ta = $("." + me.data("ta")),
-        v = me.val()
-        $s = $("." + me.data("source"));
-    // 1vs1 clone?
+    var g = $.fn.geneEH,
+        f = me.data("ta") ? $("#"+ me.data("ta")) : me.closest("form"),
+        s = me.data("source") ? $("#"+ me.data("source")) : me.closest("form"),
+        prefix = me.data("prefix");
+
+    f.find("input[name|='"+ prefix +"']").each(function(){
+        var n = $(this).attr("name").replace(prefix+"-", ""),
+            v = s.find("input[name='"+ n +"']").val()
+        $(this).val(v);
+    });
+
 });
 
 $(document).ready(function(){
