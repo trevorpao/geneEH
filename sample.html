@@ -1,8 +1,8 @@
 <!doctype html>
-<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en" ng-app> <![endif]-->
-<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en" ng-app> <![endif]-->
-<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en" ng-app> <![endif]-->
-<!--[if gt IE 8]><!--><html class="no-js" lang="en" ng-app><!--<![endif]-->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en" xmlns:geneeh="http://geneeh.com/geneml"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en" xmlns:geneeh="http://geneeh.com/geneml"> <![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js" lang="en"><!--<![endif]-->
     <head>
         <meta charset="UTF-8">
         <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -15,34 +15,44 @@
         </p>
         <h3>Demo</h3><ul>
             <li>
-                <h4>Simple</h4><p>
+                <h4>Basic</h4><p>
                     Click and look the console log.<br>
                     <a href="#" title="click me"
                         class="initGEH"
-                        data-event="click"
                         data-behavior="test">click me</a>
                 </p>
             </li>
             <li>
-                <h4>Error</h4><p>
+                <h4>Error handle</h4><p>
                     Click and look the console log. it is a demo of error<br>
                     <a href="#" title="click me"
                         class="initGEH">click me</a>
                 </p>
             </li>
             <li>
-                <h4>Auto next one</h4><p>
-                    fill the input which will auto jump to next one.<br>
-                    <input type="text" name="col1" placeholder="i can keep 4 letters."
-                        class="initGEH"
-                        data-event="keyup"
-                        data-behavior="autoNext"
-                        maxlength="4">
-                    <input type="text" name="col2" placeholder="i can keep 6 letters."
-                        class="initGEH"
-                        data-behavior="autoNext"
-                        maxlength="6">
-                    <input type="text" name="col3" placeholder="i can keep many letters.">
+                <h4>Simple form</h4><p>
+                    <form method="post" action="">
+                        fill the input which will auto jump to next one.<br>
+                        <input type="text" name="col1" placeholder="i can keep 4 letters."
+                            class="initGEH"
+                            data-event="keyup"
+                            data-behavior="autoNext"
+                            maxlength="4">
+                        <input type="text" name="col2" placeholder="i can keep 6 letters."
+                            class="initGEH"
+                            data-behavior="autoNext"
+                            maxlength="6">
+                        <input type="text" name="col3" placeholder="i can keep many letters.">
+
+                        <a href="#" title="reset"
+                            class="initGEH"
+                            data-behavior="resetForm">Reset</a>
+
+                        <a href="#" title="submit"
+                            class="initGEH"
+                            data-uri="sample.json"
+                            data-behavior="stdSubmit">Submit</a>
+                    </form>
                 </p>
             </li>
         </ul>
