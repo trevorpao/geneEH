@@ -89,6 +89,7 @@ var geneEH;
             debug: 0,
             tags: [],
             evts: {},
+            scriptName: 'geneEH',
             taClass: 'initGEH',
 
             exe: function (func, args ) {
@@ -103,8 +104,9 @@ var geneEH;
                     loc = window.location.pathname
                     dir = loc.substring(0, loc.lastIndexOf('/')) + "/";
 
-                dir += (g.isset($("script[src$='geneEH.js']"))) ?
-                    $("script[src$='geneEH.js']").attr("src").replace("geneEH.js", "") : "";
+                dir += (g.isset($("script[src$='"+ g.scriptName +".js']"))) ?
+                    $("script[src$='"+ g.scriptName +".js']")
+                    .attr("src").replace(""+ g.scriptName +".js", "") : "";
 
                 if (!g.check(functionName)) {
                     g.clog("start loading");
