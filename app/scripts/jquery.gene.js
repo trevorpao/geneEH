@@ -88,7 +88,7 @@ else {
                 yell: function(uri, postData, successCB, errorCB, type, hideLoadAnim) {
 
                     var g = $.fn.gene;
-                    var json = (uri.indexOf('://') == -1) ? "json" : "jsonp";
+                    var json = (uri.indexOf('://') == -1) ? 'json' : 'jsonp';
                     type = type || 'POST';
                     uri = (uri.indexOf('://') == -1) ? g.apiUri + uri : uri;
 
@@ -98,9 +98,9 @@ else {
 
                     $.ajax({
                             'url': uri,
-                            "type": type,
-                            "data": postData,
-                            "dataType": json,
+                            'type': type,
+                            'data': postData,
+                            'dataType': json,
                             'cache': false
                         })
                         .done(function(j) {
@@ -189,7 +189,7 @@ else {
 
                 exe: function(func, args) {
                     var g = $.fn.gene,
-                        fun = (!g.check(func)) ? g['404'] : g[func];
+                        fun = (!g.check(func)) ? g['notfound'] : g[func];
 
                     g.clog('exe::' + func);
 
@@ -229,7 +229,7 @@ else {
                     }
                 },
 
-                "404": function(me) {
+                notfound: function(me) {
                     var g = $.fn.gene;
                     g.err('command not found!!');
                 },
@@ -344,7 +344,7 @@ else {
                             meb = {};
 
                         if (!g.isset(b)) {
-                            b = '404';
+                            b = 'notfound';
                         }
 
                         if (!g.isset(e)) {

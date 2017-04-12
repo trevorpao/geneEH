@@ -4,7 +4,7 @@
  */
 ;(function(gee, $) {
     'use strict';
-    gee.hook("autoNext", function (me){
+    gee.hook('autoNext', function (me){
         var $ta = $(me.data('ta')),
             v = me.val();
 

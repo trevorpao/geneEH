@@ -2,7 +2,7 @@
  * http://jaymorrow.github.com/validatr/
  * Copyright (c) 2013 Jay Morrow; Licensed MIT */
 (function(window, document, $, undefined) {
-    "use strict";
+    'use strict';
 
     /*! Inspired by Modernizr 2.6.2| MIT & BSD
      * Build: http://modernizr.com/download/#-input-inputtypes
@@ -363,7 +363,7 @@
                 if (!source) {
                     return {
                         valid: false,
-                        message: "'" + value + "' can not be found"
+                        message: '\'' + value + '\' can not be found'
                     };
                 }
 
@@ -377,7 +377,7 @@
 
                 return {
                     valid: element.value === source.value,
-                    message: "'" + element.name + "' does not equal '" + source.name + "'"
+                    message: '\'' + element.name + '\' does not equal \'' + source.name + '\''
                 };
             }
 
@@ -419,7 +419,7 @@
                         $.extend(CustomTests, name);
                     } else {
                         if (!args) {
-                            throw new Error("You must include a callback function");
+                            throw new Error('You must include a callback function');
                         }
                         CustomTests[name] = args;
                     }
@@ -618,8 +618,8 @@
     };
 
     $.validatr.addTest('chinese', function (elem) {
-        var re1 = new RegExp("^[\u4E00-\uFA29]*$"); //Chinese character range
-        var re2 = new RegExp("^[\uE7C7-\uE7F3]*$"); //non Chinese character range
+        var re1 = new RegExp('^[\u4E00-\uFA29]*$'); //Chinese character range
+        var re2 = new RegExp('^[\uE7C7-\uE7F3]*$'); //non Chinese character range
         var str = elem.value.replace(/\s/g, '');
         var chk = true;
 
