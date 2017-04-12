@@ -1,0 +1,23 @@
+{
+  "name": "gene-event-handler",
+  "version": "0.0.1",
+  "authors": [
+    "Trevor Pao <shuaib25@gmail.com>"
+  ],
+  "keywords": [
+    "gene",
+    "gee",
+    "event",
+    "handler"
+  ],
+  "license": "MIT",
+  "homepage": "http://sense-info.co",
+  "description": "a event handler",
+  "dependencies": {
+    "jquery": "~2.1.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  }
+}

@@ -11,90 +11,12 @@ else {
                 tags: [],
                 evts: {},
                 scriptName: 'jquery.gene',
+                subFolder: 'scripts/plugins',
                 taClass: 'gee',
                 apiUri: '/',
 
                 goBack: function(me) {
                     history.go(-1);
-                },
-
-                //表單驗証
-                formValidate: function(me) {
-                    var g = $.fn.gene,
-                        chk = 1;
-
-                    me.find('input[require], select[require], textarea[require]').each(function() {
-
-                        if (chk === 0) {
-                            return chk;
-                        }
-
-                        var $cu = $(this);
-                        var label = $cu.attr('title') || $cu.attr('name');
-                        var txt = [];
-
-                        if ($cu.is(':visible')) {
-
-                            if ($cu.isEmpty()) {
-                                txt.push('請輸入' + label);
-                            }
-
-                            g.clog('required:' + $cu.attr('require'));
-
-                            if ($cu.attr('require') == 'password') {
-                                if ($cu.isPasswdErr()) {
-                                    txt.push(label + '：請確認是否符合 4~12 字英文及數字');
-                                }
-                            }
-
-                            if ($cu.attr('require') == 'sameWith') {
-                                var $ta = $('#' + $cu.data('ta'));
-                                if ($cu.val() != $ta.val()) {
-                                    txt.push(label + '不符合' + $ta.attr('title'));
-                                }
-                            }
-
-                            if ($cu.attr('require') == 'email') {
-                                if ($cu.isEmailErr()) {
-                                    txt.push(label + '：請確認是否符合 Email 格式');
-                                }
-                            }
-
-                            if ($cu.attr('require') == 'chinese') {
-                                if ($cu.isChineseErr()) {
-                                    txt.push(label + '：請確認是否為全中文');
-                                }
-                            }
-
-                            if ($cu.attr('require') == 'number') {
-                                if ($cu.isNumberErr()) {
-                                    txt.push(label + '：請確認是否符合數字格式');
-                                }
-
-                                if ($cu.data('min') && chk == 1) {
-                                    if ($cu.data('min') > $cu.val()) {
-                                        txt.push('' + label + '：應大於 ' + $cu.data('min'));
-                                    }
-                                }
-
-                                if ($cu.data('max') && chk == 1) {
-                                    if ($cu.data('max') > $cu.val()) {
-                                        txt.push('' + label + '：應小於 ' + $cu.data('max'));
-                                    }
-                                }
-                            }
-
-                        }
-
-                        if (txt.length > 0) {
-                            g.alert({
-                                title: 'Error!',
-                                txt: txt.join('/r/n')
-                            });
-                        }
-                    });
-
-                    return chk;
                 },
 
                 stdSubmit: function(me) {
@@ -152,30 +74,33 @@ else {
                         if ($(this).val() == $(this).attr('placeholder')) $(this).val('');
                     });
 
-                    if (!g.formValidate(f)) {
+                    if (!$.validatr.validateForm(f)) {
                         return false;
                     }
                     else {
-                        me.attr('disabled', 'disabled').append('<i class="fa fa-spinner"></i>');
+                        me.attr('disabled', 'disabled').append('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
 
                         g.yell(me.data('uri'), f.serialize(), dAction, dAction);
                     }
 
                 },
 
-                yell: function(uri, postData, successCB, errorCB, hideLoadAnim) {
+                yell: function(uri, postData, successCB, errorCB, type, hideLoadAnim) {
 
                     var g = $.fn.gene;
+                    var json = (uri.indexOf('://') == -1) ? "json" : "jsonp";
+                    type = type || 'POST';
+                    uri = (uri.indexOf('://') == -1) ? g.apiUri + uri : uri;
 
                     if (!hideLoadAnim) {
                         g.loadAnim('show');
                     }
 
                     $.ajax({
-                            'url': g.apiUri + uri,
-                            "type": "POST",
+                            'url': uri,
+                            "type": type,
                             "data": postData,
-                            "dataType": "json",
+                            "dataType": json,
                             'cache': false
                         })
                         .done(function(j) {
@@ -205,7 +130,6 @@ else {
                             }
                         })
                         .fail(function(o, s) {
-
                             g.err('ajax fail(' + o.status + ')!!');
                         })
                         .always(function() {
@@ -288,21 +212,19 @@ else {
                     }
                 },
 
-                load: function(functionName, sf) {
+                load: function(functionName) {
                     var g = $.fn.gene,
-                        loc = window.location.pathname,
-                        dir = g.apiUri + '/js/',
-                        subfloder = sf || 'plugins';
+                        loc = window.location.pathname;
 
-                    g.clog('script::' + dir + subfloder + '/' + functionName + '.js');
+                    g.clog('script::' + gee.subFolder + '/' + functionName + '.js');
 
                     if (!g.check(functionName)) {
                         if (typeof importScripts == 'function') {
                             g.clog('start importScripts::');
-                            importScripts(dir + subfloder + '/' + functionName + '.js');
+                            importScripts(gee.subFolder + '/' + functionName + '.js');
                         } else {
                             g.clog('start scripttag::');
-                            $('#body').append('<script src="' + dir + subfloder + '/' + functionName + '.js">\x3C/script>');
+                            $('body').append('<script src="' + gee.subFolder + '/' + functionName + '.js">\x3C/script>');
                         }
                     }
                 },
@@ -435,6 +357,10 @@ else {
                             var eba = ebi.replace(' ', '').split(',');
                             for (var ai = 0; ai < eba.length; ai++) {
                                 var ebo = eba[ai].split(':');
+                                if (!g.isset(ebo[1])) {
+                                    ebo[1] = ebo[0];
+                                    ebo[0] = 'click';
+                                }
                                 meb[ebo[0]] = ebo[1];
                             }
                         }
