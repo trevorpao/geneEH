@@ -13,6 +13,9 @@
   "license": "MIT",
   "homepage": "http://sense-info.co",
   "description": "a event handler",
+  "main": [
+    "dist/scripts/jquery.gene.min.js"
+  ],
   "dependencies": {
     "jquery": "~2.1.1"
   },
