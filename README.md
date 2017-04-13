@@ -9,6 +9,7 @@ Behavior can be controlled by genes.
 ### Links
 
 * Home page - [https://github.com/trevorpao/geneEH](https://github.com/trevorpao/geneEH)
+* Demo page - [https://trevorpao.github.io/geneEH/](https://trevorpao.github.io/geneEH/)
 
 ### Dependencies
 - [jquery](https://jquery.com/)
