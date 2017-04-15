@@ -1,3 +1,12 @@
 .gee {
     display: none;
 }
+
+/* only for demo */
+.samples>li {
+    margin-bottom: 20px;
+}
+
+.result .well {
+    margin-top: 5px;
+}

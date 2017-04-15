@@ -1,9 +1,9 @@
-
 /**
- * 多語系切換按鈕
+ * 自動切換至指定欄位
  */
+'use strict';
+
 ;(function(gee, $) {
-    'use strict';
     gee.hook('autoNext', function (me){
         var $ta = $(me.data('ta')),
             v = me.val();

@@ -9,6 +9,9 @@
     <title>Gene Event Handler</title>
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/plugins/line-numbers/prism-line-numbers.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism-okaidia.css">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <!-- Place favicon.ico in the root directory -->
     <!-- build:css styles/vendor.css -->
@@ -35,31 +38,49 @@
         <h3>Demo</h3>
         <div class="row">
             <div class="col-md-8 col-sm-12 col-md-offset-2">
-                <ul class="list-unstyled">
+                <ul class="list-unstyled samples">
                     <li>
                         <h4>Basic</h4>
                         <p>
-                            Click and look the console log.
+                            Click and look a alert.
                             <br>
-                            <a href="#" title="click me" class="gee" data-gene="click:test">click me</a>
+                            <a href="#" title="click me" class="gee" data-gene="click:alert" data-txt="This is the alert!!">click me</a>
                         </p>
+                        <pre data-src="scripts/tmpls/sample1.html" class="language-html line-numbers"></pre>
                     </li>
                     <li>
                         <h4>Auto Next</h4>
                         <p>fill the input which will auto jump to next one. </p>
-                        <form class="form-inline">
-                            <div class="form-group">
-                                <input type="text" name="an-col1" class="form-control gee" placeholder="i can keep 4 letters." data-gene="keyup:autoNext" maxlength="4" data-ta="[name='an-col2']">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation active"><a href="#sample1-result" aria-controls="sample1-result" role="tab" data-toggle="tab">Result</a></li>
+                            <li role="presentation"><a href="#sample1-html" aria-controls="sample1-html" role="tab" data-toggle="tab">Html</a></li>
+                            <li role="presentation"><a href="#sample1-js" aria-controls="sample1-js" role="tab" data-toggle="tab">Javascript</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane fade active in result" id="sample1-result">
+                                <div class="well">
+                                    <form class="form-inline">
+                                        <div class="form-group">
+                                            <input type="text" name="an-col1" class="form-control gee" placeholder="i can keep 4 letters." data-gene="keyup:autoNext" maxlength="4" data-ta="[name='an-col2']">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" name="an-col2" class="form-control gee" placeholder="i can keep 6 letters." data-gene="keyup:autoNext" maxlength="6" data-ta="[name='an-col3']">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" name="an-col3" class="form-control" placeholder="i can keep many letters.">
+                                        </div>
+                                        <button type="button" class="btn btn-default gee" data-gene="resetForm">Reset</button>
+                                        <button type="button" class="btn btn-info gee" data-uri="/sample.json" data-gene="stdSubmit">Submit</button>
+                                    </form>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <input type="text" name="an-col2" class="form-control gee" placeholder="i can keep 6 letters." data-gene="keyup:autoNext" maxlength="6" data-ta="[name='an-col3']">
+                            <div role="tabpanel" class="tab-pane fade" id="sample1-html">
+                                <pre data-src="scripts/tmpls/sample2.html" class="language-html line-numbers"></pre>
                             </div>
-                            <div class="form-group">
-                                <input type="text" name="an-col3" class="form-control" placeholder="i can keep many letters.">
+                            <div role="tabpanel" class="tab-pane fade" id="sample1-js">
+                                <pre data-src="scripts/plugins/autoNext.js" class="language-javascript line-numbers"></pre>
                             </div>
-                            <button type="button" class="btn btn-default gee" data-gene="resetForm">Reset</button>
-                            <button type="button" class="btn btn-info gee" data-uri="/sample.json" data-gene="stdSubmit">Submit</button>
-                        </form>
+                        </div>
                     </li>
                     <li>
                         <h4>Sync Form</h4>
@@ -120,11 +141,20 @@
                             </div>
                         </form>
                     </li>
+                    <li>
+                        <h4>Try it</h4>
+                        <p style="min-height: 200px;">
+                            <script async src="//jsfiddle.net/trevorpao/dtzb9zor/embed/html,result,js,css/"></script>
+                        </p>
+                    </li>
                 </ul>
             </div>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/plugins/line-numbers/prism-line-numbers.js"></script>
     <!-- build:js scripts/jquery.gene.min.js -->
     <!-- bower:js -->
     <!-- endbower -->
@@ -134,7 +164,7 @@
     <script>
     var gee = gee || $.fn.gene;
     gee.apiUri = 'http://demo.aiocms.sense-info.co' + '/api';
-    gee.debug = 1;
+    gee.debug = 0;
 
     $(document).ready(function() {
         gee.init();

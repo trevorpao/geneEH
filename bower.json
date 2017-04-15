@@ -17,7 +17,6 @@
     "dist/scripts/jquery.gene.min.js"
   ],
   "dependencies": {
-    "jquery": "~2.1.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",

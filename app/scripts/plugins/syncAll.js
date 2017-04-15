@@ -1,9 +1,9 @@
-
 /**
- * 多語系切換按鈕
+ * 同步多欄位內容
  */
+'use strict';
+
 ;(function(gee, $) {
-    'use strict';
     gee.hook('syncAll', function (me){
         var f = me.data('ta') ? $('#'+ me.data('ta')) : me.closest('form'),
             s = me.data('source') ? $('#'+ me.data('source')) : me.closest('form'),

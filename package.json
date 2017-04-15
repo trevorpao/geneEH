@@ -4,6 +4,10 @@
   "description": "a event handler",
   "author": "Trevor Pao",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:trevorpao/geneEH.git"
+  },
   "engines": {
     "node": ">=4"
   },
@@ -41,7 +45,7 @@
     },
     "rules": {
       "quotes": [
-        2,
+        4,
         "single"
       ]
     }
