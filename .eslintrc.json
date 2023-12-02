@@ -1,0 +1,23 @@
+{
+    "env": {
+        "browser": true,
+        "jquery": true,
+        "es6": true
+    },
+    "parserOptions": {
+        "sourceType": "module"
+    },
+    "extends": "eslint:recommended",
+    "rules": { // https://eslint.org/docs/rules/
+        "no-var": "off",
+        "quotes": ["error", "single"],
+        "no-console": 0,
+        "no-unused-vars": 0,
+        "no-extra-semi": 0,
+        "no-useless-escape": 0
+    },
+    "noInlineConfig": true,
+    "globals": {
+        "gee": "readonly"
+    }
+}

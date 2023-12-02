@@ -1,7 +1,7 @@
 /*! Validatr - v0.5.1 - 2013-03-12
  * http://jaymorrow.github.com/validatr/
  * Copyright (c) 2013 Jay Morrow; Licensed MIT */
-(function(window, document, $, undefined) {
+(function(window, document, $) {
     'use strict';
 
     /*! Inspired by Modernizr 2.6.2| MIT & BSD
@@ -48,7 +48,7 @@
                         inputElem.value = smile;
                         inputElem.style.cssText = 'position:absolute;visibility:hidden;';
 
-                        if (/^range$/.test(inputElemType) && inputElem.style.WebkitAppearance !== undefined) {
+                        if (/^range$/.test(inputElemType) && inputElem.style.WebkitAppearance !== void(0)) {
 
                             docElement.appendChild(inputElem);
                             defaultView = document.defaultView;
@@ -59,7 +59,7 @@
 
                             docElement.removeChild(inputElem);
 
-                        } else if (/^(search|tel)$/.test(inputElemType)) {} else if (/^(url|email)$/.test(inputElemType)) {
+                        } else if (/^(search|tel|url|email)$/.test(inputElemType)) {
                             bool = inputElem.checkValidity && inputElem.checkValidity() === false;
                         } else {
                             bool = inputElem.value !== smile;
@@ -505,7 +505,7 @@
 
         if (check.valid) {
             for (var test in CustomTests) {
-                if (CustomTests.hasOwnProperty(test) && $element.is('[data-' + test + ']')) {
+                if (Object.prototype.hasOwnProperty.call(CustomTests, test) && $element.is('[data-' + test + ']')) {
                     check = CustomTests[test](element);
                     if (!check.valid) {
                         break;

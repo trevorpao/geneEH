@@ -5,7 +5,9 @@
   "author": "Trevor Pao",
   "scripts": {
     "watch": "parcel watch",
-    "build": "parcel build"
+    "build": "parcel build",
+    "lint": "npx eslint ./src/*.js",
+    "fix": "npx eslint ./src/*.js --fix"
   },
   "source": "src/index.js",
   "main": "dist/main.js",
