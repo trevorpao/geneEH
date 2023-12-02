@@ -433,7 +433,7 @@
                     var elements = $(form).map(function() {
                             return $.makeArray(this.elements);
                         })
-                        .not('fieldset, button, input[type=submit], input[type=button], input[type=reset]');
+                        .not('fieldset, button, input[type=submit], input[type=button], input[type=reset], input.eye-icon');
 
                     if (form.id) {
                         elements = elements.add($('[form="' + form.id + '"]'));
@@ -486,6 +486,7 @@
         if (Support.inputtypes[type]) {
             check.valid = element.validity.valid;
             check.message = element.validationMessage;
+            check.message = ($(element).data('msg')) ? $(element).data('msg') : check.message;
         } else {
             if (required) {
                 check = Tests.required(element);
@@ -529,14 +530,20 @@
     function validateForm(elements) {
         var valid = true;
 
+        gee.clog('validatr start');
+
         elements.each(function(i, element) {
-            $(element).next('.validatr-err').remove();
+            $(element).next('.validatr-err').remove()
+                .end().closest('.input-group').removeClass('has-error');
             if (valid || $.fn.validatr.options.showall) {
                 if (!validateElement(element)) {
+                    gee.clog('validatr false');
                     valid = false;
                 }
             }
         });
+
+        gee.clog('validatr end');
 
         return valid;
     }
@@ -545,32 +552,38 @@
         /*jshint validthis:true */
         var error = $($.fn.validatr.options.template.replace('{{message}}', msg));
 
-        $target.after(error);
+        $target.closest('.input-group').addClass('has-error');
 
-        error.css('position', 'absolute');
+        // error.css('position', 'absolute');
+        // error.css('font-size', '0.9em');
 
-        var offset = $target.offset(),
-            location = $target[0].getAttribute('data-location') || $.fn.validatr.options.location;
+        if (!$.fn.validatr.options.defaultMsg || $target.data('force')) {
 
-        if (filters.topbottom.test(location)) {
-            error.offset({ left: offset.left });
+            $target.after(error);
 
-            if (location === 'top') {
-                error.offset({ top: offset.top - error.outerHeight() - 2 });
-            }
+            var offset = $target.offset(),
+                location = $target[0].getAttribute('data-location') || $.fn.validatr.options.location;
 
-            if (location === 'bottom') {
-                error.offset({ top: offset.top + $target.outerHeight() / 2 + error.outerHeight() });
-            }
-        } else if (filters.leftright.test(location)) {
-            error.offset({ top: (offset.top + $target.outerHeight() / 2) - (error.outerHeight() / 2) });
+            if (filters.topbottom.test(location)) {
+                error.offset({ left: offset.left });
 
-            if (location === 'left') {
-                error.offset({ left: offset.left - error.outerWidth() - 2 });
-            }
+                if (location === 'top') {
+                    error.offset({ top: offset.top + 8 - error.outerHeight() - 2});
+                }
 
-            if (location === 'right') {
-                error.offset({ left: offset.left + $target.outerWidth() + 2 });
+                if (location === 'bottom') {
+                    error.offset({ top: offset.top + $target.outerHeight() / 2 + error.outerHeight() });
+                }
+            } else if (filters.leftright.test(location)) {
+                error.offset({ top: (offset.top + $target.outerHeight() / 2) - (error.outerHeight() / 2) });
+
+                if (location === 'left') {
+                    error.offset({ left: offset.left - error.outerWidth() - 2 });
+                }
+
+                if (location === 'right') {
+                    error.offset({ left: offset.left + $target.outerWidth() + 2 });
+                }
             }
         }
     }
@@ -631,7 +644,49 @@
             valid: chk,
             message: 'Please enter some chinese.'
         };
-    })
+    });
+
+    // <div class="input-group"><input type="password" name="passwd" required data-password></div>
+    $.validatr.addTest('password', function (elem) {
+        var required = Support.attributes.required ? elem.required : $(elem).is('[required]');
+        var erp = /^(?=.*\d)(?=.*[a-zA-Z]){2,}(?=.*[a-zA-Z])(?!.*\s).{8,32}$/;
+        var chk = (erp.test(elem.value) === true) ? true : false;
+
+        if (!chk && !required && !elem.value.length) {
+            chk = true;
+        }
+
+        return {
+            valid: chk,
+            message: $(elem).data('msg') || '密碼最少須為八位英文數字組合'
+        };
+    });
+
+    // <div class="input-group"><input type="text" name="mobile" required data-minlength data-min="10" data-msg="請填寫必填欄位,至少 10 碼"></div>
+    $.validatr.addTest('minlength', function (elem) {
+        var min = elem.getAttribute('data-min') || 4;
+        var str = elem.value.replace(/\s/g, '');
+        var chk = true;
+
+        if (str.length < min * 1) {
+            chk = false;
+        }
+
+        return {
+            valid: chk,
+            message: $(elem).data('msg') || 'Not enough value length.'
+        };
+    });
+
+    // <div class="input-group"><input type="text" name="mobile" required data-same data-target="otherinput" data-msg="密碼與確認密碼不相同" ></div>
+    $.validatr.addTest('same', function (elem) {
+        var me = $(elem);
+
+        return {
+            valid: (me.val() == $('#'+ me.data('target')).val()),
+            message: $(elem).data('msg') || '兩次輸入內容不一致'
+        };
+    });
 
 }(window, document, jQuery));
 
