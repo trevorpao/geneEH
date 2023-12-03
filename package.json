@@ -12,6 +12,7 @@
   "source": "src/index.js",
   "main": "dist/main.js",
   "license": "MIT",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
   "repository": {
     "type": "git",
     "url": "git@github.com:trevorpao/geneEH.git"
@@ -35,5 +36,8 @@
         "single"
       ]
     }
+  },
+  "dependencies": {
+    "cash-dom": "^8.1.5"
   }
 }
