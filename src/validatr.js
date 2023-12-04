@@ -1,7 +1,7 @@
 /*! Validatr - v0.5.1 - 2013-03-12
  * http://jaymorrow.github.com/validatr/
  * Copyright (c) 2013 Jay Morrow; Licensed MIT */
-import $ from 'cash-dom';
+// import $ from 'cash-dom';
 'use strict';
 
 /*! Inspired by Modernizr 2.6.2| MIT & BSD

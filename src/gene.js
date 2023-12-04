@@ -1,5 +1,4 @@
 import utils from './utils.js';
-import $ from 'cash-dom';
 
 'use strict';
 
@@ -13,9 +12,9 @@ let gene = {
     taClass: 'gee',
     apiUri: '/',
 
-    stdSubmit: function (me) {
+    stdSubmit: function(me) {
         let form = me.dataset.ta ? document.getElementById(me.dataset.ta) : $(me).closest('form');
-        let dAction = function () {
+        let dAction = function() {
             me.removeAttribute('disabled');
             me.querySelector('i').remove();
 
@@ -73,7 +72,7 @@ let gene = {
         }
     },
 
-    yell: function (uri, postData, successCB, errorCB, type, hideLoadAnim) {
+    yell: function(uri, postData, successCB, errorCB, type, hideLoadAnim) {
         let json = (uri.indexOf('://') == -1) ? 'json' : 'jsonp';
         type = type || 'POST';
         uri = (uri.indexOf('://') == -1) ? gene.apiUri + uri : uri;
@@ -122,48 +121,54 @@ let gene = {
         });
     },
 
-    test: function (me) {
-        gene.clog(me);
-    },
-
-    exe: function (func, args) {
-        let fun = (!gene.check(func)) ? gene.funcs['notfound'] : gene.funcs[func];
+    exe: function(func, args) {
         gene.clog('exe::' + func);
-        return fun.call(this, args);
+        let lvl4 = func.split('|');
+        let fun = null;
+
+        for (let i4 = 0; i4 < lvl4.length; i4++) {
+            fun = (!gene.check(func)) ? gene.funcs['notfound'] : gene.funcs[func];
+            
+            fun.call(this, args);
+        }
+
+        return 1;
     },
 
-    load: function (functionName) {
-        gene.clog('importScripts::' + gene.subFolder + '/' + functionName + '.js');
-        import(gene.subFolder + '/' + functionName + '.js')
+    load: function(functionName) {
+        let uri = new URL(gene.subFolder + '/' + functionName + '.js', import.meta.url);
+
+        gene.clog(uri);
+        import(uri.pathname);
     },
 
-    notfound: function (me) {
+    notfound: function(me) {
         gene.err('command not found!!');
     },
 
-    err: function (txt) {
+    err: function(txt) {
         if (txt !== '')
             this.clog('Error::' + txt);
         else
             this.clog('Error::unknown error!!');
     },
 
-    check: function (functionName) {
+    check: function(functionName) {
         return gene.isset(gene.funcs[functionName]);
     },
 
-    clog: function (txt) {
+    clog: function(txt) {
         if (typeof console != 'undefined' && gene.debug == 1) {
             if (typeof txt == 'string' || typeof txt == 'number') {
                 console.log('gene::' + txt);
             } else {
-                console.log('gene::' + typeof (txt));
+                console.log('gene::' + typeof(txt));
                 console.log(txt);
             }
         }
     },
 
-    hookTag: function (newTagName, func) {
+    hookTag: function(newTagName, func) {
         if (!gene.check(newTagName)) {
             gene.tags.push(newTagName);
             gene.hook(newTagName, func);
@@ -172,7 +177,7 @@ let gene = {
         }
     },
 
-    hook: function (functionName, fun, evt) {
+    hook: function(functionName, fun, evt) {
         if (!gene.check(functionName)) {
             gene.funcs[functionName] = fun;
             gene.evts[functionName] = (evt != 'undefined') ? evt : 'click';
@@ -181,7 +186,7 @@ let gene = {
         }
     },
 
-    unhook: function (functionName, fun) {
+    unhook: function(functionName, fun) {
         if (gene.check(functionName)) {
             delete gene.funcs[functionName];
         } else {
@@ -189,7 +194,7 @@ let gene = {
         }
     },
 
-    isset: function (obj) {
+    isset: function(obj) {
         if (obj === void 0 || obj === null) {
             return false;
         } else {
@@ -197,20 +202,21 @@ let gene = {
         }
     },
 
-    bindToEvt: function (evt) {
+    promoter: function(evt) {
         let me = this;
 
-        if (me.dataset.nopde !== '1') {
+        if (me.dataset.nopde !== '1' || me.dataset.bubble !== '1') {
             evt.preventDefault();
-            gene.clog('nopde');
+            gene.clog('enable bubble');
         }
 
         me.event = evt;
-        gene.clog('start');
-        gene.exe(me.dataset.meb[evt.type], me);
+        console.log(me.dataset.dna);
+        gene.clog('start::' + evt.type);
+        gene.exe(me.dataset.dna[evt.type], $(me));
     },
 
-    init: function (element) {
+    init: function(element) {
         for (let tk in gene.tags) {
             gene.exe(gene.tags[tk], $(gene.tags[tk]));
         }
@@ -219,12 +225,12 @@ let gene = {
             element = 'body';
         }
 
-        $(element).find('.' + gene.taClass).each(function () {
+        $(element).find('.' + gene.taClass).each(function() {
             let me = this,
                 evt = me.dataset.event,
                 behavior = me.dataset.behavior,
-                ebi = me.dataset.gene,
-                meb = {};
+                clustered = me.dataset.gene,
+                promoterMapping = {};
 
             if (!gene.isset(behavior)) {
                 behavior = 'notfound';
@@ -234,52 +240,62 @@ let gene = {
                 evt = (!gene.isset(gene.evts[behavior])) ? 'click' : gene.evts[behavior];
             }
 
-            if (!gene.isset(ebi)) {
-
-                console.log(ebi);
-
-                meb[evt] = behavior;
+            if (!gene.isset(clustered)) {
+                promoterMapping[evt] = behavior;
             } else {
-                let eba = ebi.replace(' ', '').split(',');
+                let lvl2 = clustered.replace(' ', '').split(',');
 
-                for (let ai = 0; ai < eba.length; ai++) {
-                    let ebo = eba[ai].split(':');
-                    if (!gene.isset(ebo[1])) {
-                        ebo[1] = ebo[0];
-                        ebo[0] = 'click';
+                for (let i2 = 0; i2 < lvl2.length; i2++) {
+                    let lvl3 = lvl2[i2].split(':');
+                    if (!gene.isset(lvl3[1])) {
+                        lvl3[1] = lvl3[0];
+                        lvl3[0] = 'click';
                     }
-                    meb[ebo[0]] = ebo[1];
+                    promoterMapping[lvl3[0]] = lvl3[1];
                 }
             }
 
-            gene.clog(meb);
-            me.dataset.meb = meb;
+            gene.clog(promoterMapping);
+            me.dataset.dna = promoterMapping;
             $(me).off();
 
-            for (let ei in meb) {
-                if (!gene.check(meb[ei])) {
-                    gene.clog('load:::' + meb[ei]);
-                    gene.load(meb[ei]);
+            for (let evt in promoterMapping) {
+                let lvl4 = promoterMapping[evt].split('|');
+                for (let i4 = 0; i4 < lvl4.length; i4++) {
+                    if (!gene.check(lvl4[i4])) {
+                        gene.load(lvl4[i4]);
+                    }
+
+                    if (!gene.check(lvl4[i4])) {
+                        gene.clog('load fail:::' + lvl4[i4]);
+                    }
                 }
 
-                if (!gene.check(meb[ei])) {
-                    gene.clog('load fail:::' + meb[ei]);
-                }
+                if (evt == 'init') {
+                    gene.exe(promoterMapping[evt], me);
+                } else if (evt == 'scroll') {
+                    let target = me.dataset.target;
+                    let margin = me.dataset.margin || '0px';
+                    me.watchdog = new IntersectionObserver(function(entries) {
+                        if (entries[0].isIntersecting) {
+                            gene.exe(me.dataset.dna['scroll'], $(me));
+                        }
+                    }, {
+                        root: me,
+                        rootMargin: margin
+                    });
 
-                if (ei == 'init') {
-                    gene.exe(meb[ei], me);
+                    me.watchdog.observe(me.querySelector(target));
+                    me.watchdog.reset = function () {
+                        me.watchdog.unobserve(entries[0].target);
+                        me.watchdog.observe(me.querySelector(target));
+                    };
                 } else {
-                    $(me).on(ei, gene.bindToEvt);
+                    $(me).on(evt, gene.promoter);
                 }
             }
         }).removeClass(gene.taClass);
     }
 };
 
-if (window.gene === void 0) {
-    window.gene = gene;
-}
-
-
 export default gene;
-

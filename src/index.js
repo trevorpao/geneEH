@@ -1,8 +1,13 @@
-import gene from './gene.js';
 
-gene.apiUri = 'http://demo.aiocms.sense-info.co' + '/api';
-gene.debug = 1;
+import './bootstrap';
+import './validatr';
+import './base';
+
+gee.apiUri = 'http://demo.aiocms.sense-info.co' + '/api';
+gee.debug = 1;
+
+gee.subFolder = '../../app/scripts/plugins';
 
 document.addEventListener('DOMContentLoaded', function() {
-    gene.init();
+    gee.init();
 });
