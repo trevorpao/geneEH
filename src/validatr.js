@@ -1,8 +1,9 @@
 /*! Validatr - v0.5.1 - 2013-03-12
  * http://jaymorrow.github.com/validatr/
  * Copyright (c) 2013 Jay Morrow; Licensed MIT */
-// import $ from 'cash-dom';
 'use strict';
+
+import utils from "./utils";
 
 /*! Inspired by Modernizr 2.6.2| MIT & BSD
  * Build: http://modernizr.com/download/#-input-inputtypes
@@ -431,7 +432,7 @@ var Support = (function() {
                 }
 
                 var elements = $(form).map(function() {
-                        return $.makeArray(this.elements);
+                        return utils.makeArray(this.elements);
                     })
                     .not('fieldset, button, input[type=submit], input[type=button], input[type=reset], input.eye-icon');
 
@@ -453,7 +454,7 @@ var Support = (function() {
             },
 
             validateForm: function(form) {
-                var element = this.el || (form instanceof jQuery ? form[0] : form),
+                var element = this.el || (form instanceof $ ? form[0] : form),
                     valid;
 
                 if (element.nodeName.toLowerCase() !== 'form') {
@@ -519,7 +520,7 @@ function validateElement(element) {
         return true;
     }
 
-    $.data(element, 'validationMessage', check.message);
+    $(element).data('validationMessage', check.message);
     $element.trigger('invalid');
 
     position($element, check.message);
@@ -533,8 +534,8 @@ function validateForm(elements) {
     gee.clog('validatr start');
 
     elements.each(function(i, element) {
-        $(element).next('.validatr-err').remove()
-            .end().closest('.input-group').removeClass('has-error');
+        $(element).next('.validatr-err').remove();
+        $(element).closest('.input-group').removeClass('has-error');
         if (valid || $.fn.validatr.options.showall) {
             if (!validateElement(element)) {
                 gee.clog('validatr false');

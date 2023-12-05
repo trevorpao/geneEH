@@ -1,15 +1,15 @@
 
 "use strict";
 
-gee.hook('react', function(me) {
-    var ta = $(me.event.target);
+gee.hook('react', function (me) {
+    let ta = $(me.event.target);
 
     if (!ta.attr('func')) {
         ta = ta.parent();
     }
 
-    var func = ta.attr('func');
-    var type = ta.data('event') || 'click';
+    let func = ta.attr('func');
+    let type = ta.data('event') || 'click';
 
     gee.clog(func);
 
@@ -19,9 +19,9 @@ gee.hook('react', function(me) {
     }
 });
 
-gee.hook('alert', function(me) {
-    var title = me.title || me.data('title');
-    var content = me.txt || me.data('txt');
+gee.hook('alert', function (me) {
+    let title = me.title || me.data('title');
+    let content = me.txt || me.data('txt');
 
     // $('#errorModal')
     // .find('.title').html(title).end()
@@ -30,15 +30,15 @@ gee.hook('alert', function(me) {
     alert(content);
 });
 
-gee.hook('resetForm', function(me) {
-    var form = me.data('ta') ? $('#' + me.data('ta')) : me.closest('form');
+gee.hook('resetForm', function (me) {
+    let form = me.data('ta') ? $('#' + me.data('ta')) : me.closest('form');
     form[0].reset();
 });
 
-gee.hook('stdSubmit', function(me) {
-    var g = $.fn.gene,
+gee.hook('stdSubmit', function (me) {
+    let g = $.fn.gene,
         form = me.data('ta') ? $('#' + me.data('ta')) : me.closest('form'),
-        dAction = function() {
+        dAction = function () {
 
             me.removeAttr('disabled').find('i').remove();
 
@@ -85,45 +85,43 @@ gee.hook('stdSubmit', function(me) {
             }
         };
 
-    f.find('input').each(function() {
+    form.find('input').each(function () {
         if ($(this).val() == $(this).attr('placeholder')) $(this).val('');
     });
 
-    if (!$.validatr.validateForm(f)) {
+    if (!$.validatr.validateForm(form)) {
         return false;
     } else {
         me.attr('disabled', 'disabled').append('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
 
-        g.yell(me.data('uri'), f.serialize(), dAction, dAction);
+        g.yell(me.data('uri'), form.serialize(), dAction, dAction);
     }
 });
 
 /**
  * 自動切換至指定欄位
  */
-gee.hook('autoNext', function (me){
-    var $ta = $(me.data('ta')),
+gee.hook('autoNext', function (me) {
+    let $ta = $(me.data('ta')) || me.next('input'),
         v = me.val();
 
-    if( v.length == me.attr('maxlength')){
+    if (v.length == me.attr('maxlength')) {
         if ($ta.length) {
-            $ta.focus().select();
-        }
-        else {
-            me.next('input').focus().select();
+            $ta.get(0).focus();
+            $ta.get(0).select();
         }
     }
 }, 'keyup');
 
 
-gee.hook('syncAll', function (me){
-    var f = me.data('ta') ? $('#'+ me.data('ta')) : me.closest('form'),
-        s = me.data('source') ? $('#'+ me.data('source')) : me.closest('form'),
+gee.hook('syncAll', function (me) {
+    let form = me.data('ta') ? $('#' + me.data('ta')) : me.closest('form'),
+        source = me.data('source') ? $('#' + me.data('source')) : me.closest('form'),
         prefix = me.data('prefix');
 
-    f.find('input[name|=\''+ prefix +'\']').each(function(){
-        var n = $(this).attr('name').replace(prefix+'-', ''),
-            v = s.find('input[name=\''+ n +'\']').val()
+    form.find('input[name|=\'' + prefix + '\']').each(function () {
+        let n = $(this).attr('name').replace(prefix + '-', ''),
+            v = source.find('input[name=\'' + n + '\']').val()
         $(this).val(v);
     });
 });

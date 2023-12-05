@@ -211,9 +211,8 @@ let gene = {
         }
 
         me.event = evt;
-        console.log(me.dataset.dna);
         gene.clog('start::' + evt.type);
-        gene.exe(me.dataset.dna[evt.type], $(me));
+        gene.exe(me.dna[evt.type], $(me));
     },
 
     init: function(element) {
@@ -256,7 +255,7 @@ let gene = {
             }
 
             gene.clog(promoterMapping);
-            me.dataset.dna = promoterMapping;
+            me.dna = promoterMapping;
             $(me).off();
 
             for (let evt in promoterMapping) {
